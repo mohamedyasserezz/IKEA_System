@@ -42,7 +42,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
                 var Result = _departmentServices.CreateDepartment(department);
 
-                if (Result > 0) 
+                if (Result > 0)
                     return RedirectToAction(nameof(Index));
                 else
                 {
@@ -80,5 +80,20 @@ namespace LinkDev.IKEA.PL.Controllers
 
             }
         }
+
+        [HttpGet]
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var department = _departmentServices.GetDepartmentsById(id.Value);
+
+            if (department is { })
+                return View(department);
+
+            return NotFound();
+        }
+
     }
 }
