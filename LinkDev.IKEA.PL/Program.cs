@@ -1,3 +1,5 @@
+using LinkDev.IKEA.DAL.Persistance.Data;
+using Microsoft.EntityFrameworkCore;
 namespace LinkDev.IKEA.PL
 {
     public class Program
@@ -10,6 +12,25 @@ namespace LinkDev.IKEA.PL
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+
+            builder.Services.AddDbContext<ApplicationDbContext>(
+                optionsAction: (optionsBuilder) =>
+                {
+
+                    //optionsBuilder.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["DefaultConnection"]);
+                    optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+                });
+
+
+            /// builder.Services.AddScoped<ApplicationDbContext>();
+            /// builder.Services.AddScoped<DbContextOptions<ApplicationDbContext>>((ServiceProvider) =>
+            /// {
+            ///     var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            ///     optionsBuilder.UseSqlServer();
+            ///     var options = optionsBuilder.Options;
+            ///     return options;
+            /// });
             #endregion
 
             var app = builder.Build();
@@ -32,7 +53,7 @@ namespace LinkDev.IKEA.PL
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}"); 
+                pattern: "{controller=Home}/{action=Index}/{id?}");
             #endregion
 
 

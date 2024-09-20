@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LinkDev.IKEA.DAL.Persistance.Data
 {
-    internal class ApplicationDbContextSeed
+    public class ApplicationDbContextSeed
     {
         public static void Seed(ApplicationDbContext dbContext)
         {
