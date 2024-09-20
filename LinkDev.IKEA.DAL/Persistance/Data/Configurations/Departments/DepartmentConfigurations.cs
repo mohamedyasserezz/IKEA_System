@@ -1,4 +1,4 @@
-﻿using LinkDev.IKEA.DAL.Models.Department;
+﻿using LinkDev.IKEA.DAL.Entities.Department;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -17,7 +17,9 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Configurations.Departments
             builder.Property(D => D.Name).HasColumnType("VarChar(50)").IsRequired();
             builder.Property(D => D.Code).HasColumnType("VarChar(20)").IsRequired();
             builder.Property(D => D.CreatedOn).HasDefaultValueSql("GetDate()");
+            //builder.Property(D => D.CreatedBy).HasDefaultValueSql("GetDate()");
             builder.Property(D => D.LastModifiedOn).HasComputedColumnSql("GetDate()");
+            //builder.Property(D => D.LastModifiedBy).HasComputedColumnSql("GetDate()");
         }
     }
 }
