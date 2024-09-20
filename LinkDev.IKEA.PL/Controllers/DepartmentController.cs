@@ -9,7 +9,8 @@ namespace LinkDev.IKEA.PL.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var departments = _departmentServices.GetAllDepartments();
+            return View(departments);
         }
     }
 }

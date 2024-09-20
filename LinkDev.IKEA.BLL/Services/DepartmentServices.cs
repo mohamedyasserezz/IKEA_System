@@ -21,7 +21,6 @@ namespace LinkDev.IKEA.BLL.Services
                 Code = de.Code,
                 Name = de.Name,
                 CreationDate = de.CreationDate,
-                Description = de.Description,
             }).AsNoTracking().ToList();
             return departments;
 
