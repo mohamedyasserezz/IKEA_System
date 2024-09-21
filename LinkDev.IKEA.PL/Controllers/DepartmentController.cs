@@ -12,15 +12,22 @@ namespace LinkDev.IKEA.PL.Controllers
         ILogger<DepartmentController> logger,
         IWebHostEnvironment webHostEnvironment) : Controller
     {
+        #region Services
         private readonly IDepartmentServices _departmentServices = departmentServices;
         private readonly ILogger<DepartmentController> _logger = logger;
         private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
+        #endregion
 
+        #region Index
+        [HttpGet]
         public IActionResult Index()
         {
             var departments = _departmentServices.GetAllDepartments();
             return View(departments);
         }
+        #endregion
+
+        #region Details
         [HttpGet]
         public IActionResult Details(int? id)
         {
@@ -34,6 +41,9 @@ namespace LinkDev.IKEA.PL.Controllers
 
             return NotFound();
         }
+        #endregion
+
+        #region Create
         [HttpGet]
         public IActionResult Create()
         {
@@ -85,8 +95,10 @@ namespace LinkDev.IKEA.PL.Controllers
             ModelState.AddModelError(String.Empty, Message);
             return View(department);
         }
+        #endregion
 
-       
+
+        #region Edit
         [HttpGet]
         public IActionResult Edit(int? id)
         {
@@ -102,15 +114,15 @@ namespace LinkDev.IKEA.PL.Controllers
             {
                 Description = department.Description,
                 CreationDate = department.CreationDate,
-                Code = department.Code, 
+                Code = department.Code,
                 Name = department.Name,
             });
         }
 
         [HttpPost]
-        public IActionResult Edit([FromRoute]int id, DepartmentEditViewModel departmentVM)
+        public IActionResult Edit([FromRoute] int id, DepartmentEditViewModel departmentVM)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(departmentVM);
 
             var Message = string.Empty;
@@ -140,13 +152,69 @@ namespace LinkDev.IKEA.PL.Controllers
 
                 // 2.Set Message
                 Message = _webHostEnvironment.IsDevelopment() ? Message = ex.Message : "an Error has been occured during updating the department :(";
-               
+
             }
 
             ModelState.AddModelError(String.Empty, Message);
-            return View(departmentVM); 
+            return View(departmentVM);
 
         }
 
+        #endregion
+
+        #region Delete
+        [HttpGet]
+        public IActionResult Delete([FromRoute] int? id)
+        {
+            if (id == null)
+                return BadRequest();
+            var department = _departmentServices.GetDepartmentsById(id.Value);
+
+            if (department == null)
+                return NotFound();
+
+            return View(department);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var department = _departmentServices.GetDepartmentsById(id);
+            var Message = string.Empty;
+            if (department == null)
+                return NotFound();
+            try
+            {
+                var departmentDto = new UpdatedDepartmentDto
+                {
+                    Id = id,
+                    Code = department.Code,
+                    Name = department.Name,
+                    CreationDate = department.CreationDate,
+                    Description = department.Description,
+                };
+
+                var IsDeleted = _departmentServices.DeleteDepartment(id);
+
+                if (IsDeleted)
+                    return RedirectToAction("Index");
+
+                Message = "an Error has been occured during Deleting the department :(";
+            }
+            catch (Exception ex)
+            {
+
+                // 1. Log Exceptions
+                _logger.LogError(ex, ex.Message);
+
+                // 2.Set Message
+                Message = _webHostEnvironment.IsDevelopment() ? Message = ex.Message : "an Error has been occured during Deleting the department :(";
+
+            }
+
+            ModelState.AddModelError(String.Empty, Message);
+            return View(department);
+        } 
+        #endregion
     }
 }
