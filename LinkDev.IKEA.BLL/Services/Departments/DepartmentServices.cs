@@ -1,5 +1,5 @@
 ﻿using LinkDev.IKEA.BLL.Models.Departments;
-using LinkDev.IKEA.DAL.Entities.Department;
+using LinkDev.IKEA.DAL.Entities.Departments;
 using LinkDev.IKEA.DAL.Persistance.Repositories.Departments;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkDev.IKEA.BLL.Services
+namespace LinkDev.IKEA.BLL.Services.Departments
 {
     public class DepartmentServices(IDepartmentRepository repository) : IDepartmentServices
     {
