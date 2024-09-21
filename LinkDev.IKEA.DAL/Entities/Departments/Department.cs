@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkDev.IKEA.DAL.Entities.Department
+namespace LinkDev.IKEA.DAL.Entities.Departments
 {
     public class Department : ModelBase
     {
