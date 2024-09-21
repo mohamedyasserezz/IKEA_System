@@ -15,20 +15,23 @@ namespace LinkDev.IKEA.BLL.Services.Employees
 
         public IEnumerable<EmployeeDto> GetAllEmployees()
         {
-            return _employeeRepository.GetAllAsIQueryable().Where(E => !E.IsDeleted).Select(
-               EmployeeDto => new EmployeeDto
-               {
-                   Id = EmployeeDto.Id,
-                   Name = EmployeeDto.Name,
-                   Age = EmployeeDto.Age,
-                   Salary = EmployeeDto.Salary,
+            var employees = _employeeRepository.GetIQueryable()
+                .Where(E => !E.IsDeleted)
+                .Select(EmployeeDto => new EmployeeDto
+                {
+                    Id = EmployeeDto.Id,
+                    Name = EmployeeDto.Name,
+                    Age = EmployeeDto.Age,
+                    Salary = EmployeeDto.Salary,
 
-                   Email = EmployeeDto.Email,
-                   IsActive = EmployeeDto.IsActive,
-                   Gender = nameof(EmployeeDto.Gender),
-                   EmployeeType = nameof(EmployeeDto.EmployeeType),
+                    Email = EmployeeDto.Email,
+                    IsActive = EmployeeDto.IsActive,
+                    Gender = nameof(EmployeeDto.Gender),
+                    EmployeeType = nameof(EmployeeDto.EmployeeType),
 
-               });
+                }).ToList();
+
+            return employees;
         }
 
         public EmployeeDetailsDto? GetEmployeesById(int id)

@@ -15,7 +15,7 @@ namespace LinkDev.IKEA.BLL.Services.Departments
         private readonly IDepartmentRepository _repository = repository;
         public IEnumerable<DepartmentDto> GetAllDepartments()
         {
-            var departments = _repository.GetAllAsIQueryable().Select(de => new DepartmentDto
+            var departments = _repository.GetIQueryable().Select(de => new DepartmentDto
             {
                 Id = de.Id,
                 Code = de.Code,

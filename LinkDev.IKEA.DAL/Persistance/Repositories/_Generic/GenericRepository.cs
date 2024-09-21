@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LinkDev.IKEA.DAL.Persistance.Repositories._Generic
 {
-    public class GenericRepository<T>(ApplicationDbContext dbContext) where T : ModelBase
+    public class GenericRepository<T>(ApplicationDbContext dbContext): IGenericRepository<T> where T : ModelBase
     {
         private readonly ApplicationDbContext _dbContext = dbContext;
 
@@ -19,9 +19,13 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositories._Generic
                 return _dbContext.Set<T>().Where(E => !E.IsDeleted).AsNoTracking().ToList();
             return _dbContext.Set<T>().Where(E => !E.IsDeleted).ToList();
         }
-        public IQueryable<T> GetAllAsIQueryable()
+        public IQueryable<T> GetIQueryable()
         {
             return _dbContext.Set<T>().Where(E => !E.IsDeleted);
+        }
+        public IEnumerable<T> GetIEnumerable()
+        {
+            throw new NotImplementedException();
         }
         public T? Get(int id)
         {
@@ -50,5 +54,7 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositories._Generic
             _dbContext.Update(entity);
             return _dbContext.SaveChanges();
         }
+
+       
     }
 }
