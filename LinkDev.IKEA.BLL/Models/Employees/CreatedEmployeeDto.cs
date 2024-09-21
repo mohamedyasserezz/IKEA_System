@@ -17,8 +17,8 @@ namespace LinkDev.IKEA.BLL.Models.Employees
         [Range(22,30)]
         public int? Age { get; set; }
 
-        [RegularExpression("\"^(\\\\d{1,}) [a-zA-Z0-9\\\\s]+(\\\\,)? [a-zA-Z]+(\\\\,)? [A-Z]{2} [0-9]{5,6}$\"",
-                                  ErrorMessage = "wrong address")]
+        //[RegularExpression("\"^(\\\\d{1,}) [a-zA-Z0-9\\\\s]+(\\\\,)? [a-zA-Z]+(\\\\,)? [A-Z]{2} [0-9]{5,6}$\"",
+        //                          ErrorMessage = "wrong address")]
         public string? Address { get; set; }
         [DataType(DataType.Currency)]
         public decimal Salary { get; set; }

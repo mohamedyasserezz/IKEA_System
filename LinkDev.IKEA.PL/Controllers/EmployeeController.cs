@@ -2,7 +2,6 @@
 using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.DAL.Entities.Employees;
 using LinkDev.IKEA.PL.ViewModels.Departments;
-using LinkDev.IKEA.PL.ViewModels.Employees;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA.PL.Controllers

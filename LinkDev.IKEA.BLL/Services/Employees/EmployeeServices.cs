@@ -15,7 +15,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
 
         public IEnumerable<EmployeeDto> GetAllEmployees()
         {
-            return _employeeRepository.GetAllAsIQueryable().Select(
+            return _employeeRepository.GetAllAsIQueryable().Where(E => !E.IsDeleted).Select(
                EmployeeDto => new EmployeeDto
                {
                    Id = EmployeeDto.Id,
