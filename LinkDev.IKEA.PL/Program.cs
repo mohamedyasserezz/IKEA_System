@@ -1,4 +1,4 @@
-using LinkDev.IKEA.BLL.Services;
+using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.DAL.Persistance.Data;
 using LinkDev.IKEA.DAL.Persistance.Repositories.Departments;
 using Microsoft.EntityFrameworkCore;

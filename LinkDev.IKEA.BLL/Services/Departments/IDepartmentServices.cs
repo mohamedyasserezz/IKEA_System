@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkDev.IKEA.BLL.Services
+namespace LinkDev.IKEA.BLL.Services.Departments
 {
     public interface IDepartmentServices
     {
