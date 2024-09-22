@@ -1,6 +1,7 @@
 ﻿using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.DAL.Entities.Employees;
 using LinkDev.IKEA.DAL.Persistance.Repositories.Employees;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
         public IEnumerable<EmployeeDto> GetAllEmployees()
         {
             var employees = _employeeRepository.GetIQueryable()
-                .Where(E => !E.IsDeleted)
+                .Where(E => !E.IsDeleted).Include(E => E.Department)
                 .Select(EmployeeDto => new EmployeeDto
                 {
                     Id = EmployeeDto.Id,
@@ -28,6 +29,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                     IsActive = EmployeeDto.IsActive,
                     Gender = nameof(EmployeeDto.Gender),
                     EmployeeType = nameof(EmployeeDto.EmployeeType),
+                    Department = EmployeeDto.Department!.Name,
 
                 }).ToList();
 
@@ -46,6 +48,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                     Salary = employee.Salary,
                     Address = employee.Address,
                     HiringDate = employee.HiringDate,
+                    Department = employee.Department?.Name,
                     Email = employee.Email,
                     PhoneNumber = employee.PhoneNumber,
                     IsActive = employee.IsActive,
@@ -61,6 +64,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
         {
             var employee = new Employee
             {
+                DepartmentId = EmployeeDto.DepartmentId,
                 Name = EmployeeDto.Name,
                 Age = EmployeeDto.Age,
                 Salary = EmployeeDto.Salary,
@@ -96,6 +100,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 CreatedBy = 1,
                 LastModifiedBy = 1,
                 LastModifiedOn = DateTime.UtcNow,
+                DepartmentId = EmployeeDto.DepartmentId,
             };
 
             return _employeeRepository.Update(employee);

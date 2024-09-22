@@ -31,7 +31,9 @@ namespace LinkDev.IKEA.BLL.Models.Employees
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public int LastModifiedBy { get; set; }
-        public DateTime LastModifiedOn { get; set; } 
+        public DateTime LastModifiedOn { get; set; }
         #endregion
+
+        public string? Department { get; set; }
     }
 }

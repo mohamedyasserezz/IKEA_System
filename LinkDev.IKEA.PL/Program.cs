@@ -22,7 +22,9 @@ namespace LinkDev.IKEA.PL
                 {
 
                     //optionsBuilder.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["DefaultConnection"]);
-                    optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                    optionsBuilder.UseLazyLoadingProxies()
+                    .UseSqlServer(builder.Configuration
+                    .GetConnectionString("DefaultConnection"));
 
                 });
 

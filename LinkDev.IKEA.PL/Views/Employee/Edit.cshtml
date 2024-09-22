@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var departments = new SelectList(ViewData["Departments"] as IEnumerable<DepartmentDto>, nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
+
 } 
 
 
@@ -42,6 +44,13 @@
             <label class="form-label" asp-for="PhoneNumber"></label>
             <input asp-for="PhoneNumber" class="form-control mb-3" />
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-6 mb-3">
+            <label asp-for="DepartmentId" class="control-label mb-2"></label>
+            <select asp-for="DepartmentId" asp-items="@departments" class="form-control">
+                <option value="@null">Choose...</option>
+            </select>
         </div>
 
         <div class="form-group col-6">
