@@ -37,23 +37,24 @@ namespace LinkDev.IKEA.BLL.Services.Employees
         public EmployeeDetailsDto? GetEmployeesById(int id)
         {
             var employee = _employeeRepository.Get(id);
-            if (employee == null)
-                return null;
-            return new EmployeeDetailsDto
-            {
-                Id = employee.Id,
-                Name = employee.Name,
-                Age = employee.Age,
-                Salary = employee.Salary,
-                Address = employee.Address,
-                HiringDate = employee.HiringDate,
-                Email = employee.Email,
-                PhoneNumber = employee.PhoneNumber,
-                IsActive = employee.IsActive,
-                Gender = employee.Gender,
-                EmployeeType = employee.EmployeeType,
+            if (employee is { IsDeleted: false })
+                return new EmployeeDetailsDto
+                {
+                    Id = employee.Id,
+                    Name = employee.Name,
+                    Age = employee.Age,
+                    Salary = employee.Salary,
+                    Address = employee.Address,
+                    HiringDate = employee.HiringDate,
+                    Email = employee.Email,
+                    PhoneNumber = employee.PhoneNumber,
+                    IsActive = employee.IsActive,
+                    Gender = employee.Gender,
+                    EmployeeType = employee.EmployeeType,
 
-            };
+                };
+            return null;
+
         }
 
         public int CreateEmployee(CreatedEmployeeDto EmployeeDto)
@@ -105,8 +106,8 @@ namespace LinkDev.IKEA.BLL.Services.Employees
             var employee = _employeeRepository.Get(id);
             if (employee == null)
                 return false;
-           return _employeeRepository.Delete(employee) > 0;
-           
+            return _employeeRepository.Delete(employee) > 0;
+
         }
 
 
