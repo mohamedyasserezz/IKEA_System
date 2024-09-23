@@ -1,10 +1,5 @@
 ﻿using LinkDev.IKEA.DAL.Common.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LinkDev.IKEA.BLL.Models.Employees
 {
@@ -45,7 +40,9 @@ namespace LinkDev.IKEA.BLL.Models.Employees
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public int LastModifiedBy { get; set; }
-        public DateTime LastModifiedOn { get; set; } 
+        public DateTime LastModifiedOn { get; set; }
         #endregion
+
+        public string? Department { get; set; }
     }
 }

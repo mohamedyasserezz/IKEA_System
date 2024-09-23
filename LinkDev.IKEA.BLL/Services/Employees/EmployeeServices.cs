@@ -1,6 +1,7 @@
 ﻿using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.DAL.Entities.Employees;
 using LinkDev.IKEA.DAL.Persistance.Repositories.Employees;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,48 +16,55 @@ namespace LinkDev.IKEA.BLL.Services.Employees
 
         public IEnumerable<EmployeeDto> GetAllEmployees()
         {
-            return _employeeRepository.GetAllAsIQueryable().Where(E => !E.IsDeleted).Select(
-               EmployeeDto => new EmployeeDto
-               {
-                   Id = EmployeeDto.Id,
-                   Name = EmployeeDto.Name,
-                   Age = EmployeeDto.Age,
-                   Salary = EmployeeDto.Salary,
+            var employees = _employeeRepository.GetIQueryable()
+                .Where(E => !E.IsDeleted).Include(E => E.Department)
+                .Select(EmployeeDto => new EmployeeDto
+                {
+                    Id = EmployeeDto.Id,
+                    Name = EmployeeDto.Name,
+                    Age = EmployeeDto.Age,
+                    Salary = EmployeeDto.Salary,
 
-                   Email = EmployeeDto.Email,
-                   IsActive = EmployeeDto.IsActive,
-                   Gender = nameof(EmployeeDto.Gender),
-                   EmployeeType = nameof(EmployeeDto.EmployeeType),
+                    Email = EmployeeDto.Email,
+                    IsActive = EmployeeDto.IsActive,
+                    Gender = nameof(EmployeeDto.Gender),
+                    EmployeeType = nameof(EmployeeDto.EmployeeType),
+                    Department = EmployeeDto.Department!.Name,
 
-               });
+                }).ToList();
+
+            return employees;
         }
 
         public EmployeeDetailsDto? GetEmployeesById(int id)
         {
             var employee = _employeeRepository.Get(id);
-            if (employee == null)
-                return null;
-            return new EmployeeDetailsDto
-            {
-                Id = employee.Id,
-                Name = employee.Name,
-                Age = employee.Age,
-                Salary = employee.Salary,
-                Address = employee.Address,
-                HiringDate = employee.HiringDate,
-                Email = employee.Email,
-                PhoneNumber = employee.PhoneNumber,
-                IsActive = employee.IsActive,
-                Gender = employee.Gender,
-                EmployeeType = employee.EmployeeType,
+            if (employee is { IsDeleted: false })
+                return new EmployeeDetailsDto
+                {
+                    Id = employee.Id,
+                    Name = employee.Name,
+                    Age = employee.Age,
+                    Salary = employee.Salary,
+                    Address = employee.Address,
+                    HiringDate = employee.HiringDate,
+                    Department = employee.Department?.Name,
+                    Email = employee.Email,
+                    PhoneNumber = employee.PhoneNumber,
+                    IsActive = employee.IsActive,
+                    Gender = employee.Gender,
+                    EmployeeType = employee.EmployeeType,
 
-            };
+                };
+            return null;
+
         }
 
         public int CreateEmployee(CreatedEmployeeDto EmployeeDto)
         {
             var employee = new Employee
             {
+                DepartmentId = EmployeeDto.DepartmentId,
                 Name = EmployeeDto.Name,
                 Age = EmployeeDto.Age,
                 Salary = EmployeeDto.Salary,
@@ -92,6 +100,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 CreatedBy = 1,
                 LastModifiedBy = 1,
                 LastModifiedOn = DateTime.UtcNow,
+                DepartmentId = EmployeeDto.DepartmentId,
             };
 
             return _employeeRepository.Update(employee);
@@ -102,8 +111,8 @@ namespace LinkDev.IKEA.BLL.Services.Employees
             var employee = _employeeRepository.Get(id);
             if (employee == null)
                 return false;
-           return _employeeRepository.Delete(employee) > 0;
-           
+            return _employeeRepository.Delete(employee) > 0;
+
         }
 
 

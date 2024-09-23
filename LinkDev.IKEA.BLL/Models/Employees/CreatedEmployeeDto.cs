@@ -1,10 +1,5 @@
 ﻿using LinkDev.IKEA.DAL.Common.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LinkDev.IKEA.BLL.Models.Employees
 {
@@ -38,6 +33,9 @@ namespace LinkDev.IKEA.BLL.Models.Employees
         public DateOnly HiringDate { get; set; }
         public Gender Gender { get; set; } 
         [Display(Name = "Employee Type")]
-        public EmployeeType EmployeeType { get; set; } 
+        public EmployeeType EmployeeType { get; set; }
+
+        [Display(Name = "Department")]
+        public int? DepartmentId { get; set; }
     }
 }

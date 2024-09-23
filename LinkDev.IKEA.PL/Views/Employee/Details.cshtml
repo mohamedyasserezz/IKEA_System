@@ -32,6 +32,10 @@
                 <input asp-for="Email" class="form-control" readonly />
             </div>
             <div class="form-group col-6 mb-4">
+                <label class="form-label" asp-for="Department"></label>
+                <input asp-for="Department" class="form-control" readonly />
+            </div>
+            <div class="form-group col-6 mb-4">
                 <label class="form-label" asp-for="Address"></label>
                 <input asp-for="Address" class="form-control" readonly />
             </div>
@@ -57,7 +61,12 @@
                     } *@
                 </select>
             </div>
-            <div class="form-group col-6 mb-4">
+            <div class="form-group col-12 mt-2">
+                <label class="form-label" asp-for="HiringDate"></label>
+                <input readonly asp-for="HiringDate" type="date" class="form-control" />
+                =
+            </div>
+            <div class="form-group col-6 my-2">
                 <label class="control-label mb-2" asp-for="Gender"></label><br />
                 @foreach (Gender genderOption in Enum.GetValues(typeof(Gender)))
                 {
@@ -75,10 +84,7 @@
 
 
 
-            <div class="form-group col-12 mt-3">
-                <label class="form-label" asp-for="HiringDate"></label>
-                <input readonly asp-for="HiringDate" type="date" class="form-control" />
-=            </div>
+            
 
             <div class="form-check col-12 my-2">
                 <input readonly asp-for="IsActive" class="form-check-input" />

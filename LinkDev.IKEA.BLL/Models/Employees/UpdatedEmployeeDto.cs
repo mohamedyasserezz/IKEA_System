@@ -1,10 +1,5 @@
 ﻿using LinkDev.IKEA.DAL.Common.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LinkDev.IKEA.BLL.Models.Employees
 {
@@ -41,5 +36,6 @@ namespace LinkDev.IKEA.BLL.Models.Employees
 
         [Display(Name = "Employee Type")]
         public EmployeeType EmployeeType { get; set; }
+        public int? DepartmentId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LinkDev.IKEA.BLL.Models.Employees;
+using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.DAL.Entities.Employees;
 using LinkDev.IKEA.PL.ViewModels.Departments;
@@ -9,7 +10,8 @@ namespace LinkDev.IKEA.PL.Controllers
     public class EmployeeController
         (IEmployeeServices employeeServices,
         ILogger<EmployeeController> logger,
-        IWebHostEnvironment webHostEnvironment) : Controller
+        IWebHostEnvironment webHostEnvironment
+        ) : Controller
     {
         #region Services
         private readonly IEmployeeServices _employeeServices = employeeServices;
@@ -44,13 +46,15 @@ namespace LinkDev.IKEA.PL.Controllers
 
         #region Create
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create([FromServices] IDepartmentServices _departmentServices)
         {
+            ViewData["Departments"] = _departmentServices.GetAllDepartments();
             return View();
         }
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreatedEmployeeDto Employee)
         {
 
@@ -115,7 +119,7 @@ namespace LinkDev.IKEA.PL.Controllers
                 Address = Employee.Address,
                 Age = Employee.Age,
                 Email = Employee.Email,
-                HiringDate  = Employee.HiringDate,
+                HiringDate = Employee.HiringDate,
                 IsActive = Employee.IsActive,
                 Name = Employee.Name,
                 PhoneNumber = Employee.PhoneNumber,
@@ -124,6 +128,7 @@ namespace LinkDev.IKEA.PL.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto employee)
         {
             if (!ModelState.IsValid)
@@ -132,7 +137,7 @@ namespace LinkDev.IKEA.PL.Controllers
             var Message = string.Empty;
             try
             {
-                
+
 
                 var result = _employeeServices.UpdateEmployee(employee) > 0;
 
@@ -174,18 +179,19 @@ namespace LinkDev.IKEA.PL.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-          
+
             var Message = string.Empty;
-            
+
             try
             {
                 var result = _employeeServices.DeleteEmployee(id);
                 if (result)
                     return RedirectToAction("Index");
 
-                
+
 
                 Message = "an Error has been occured during Deleting the Employee :(";
             }
@@ -202,7 +208,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
             ModelState.AddModelError(String.Empty, Message);
             return View();
-        } 
+        }
         #endregion
     }
 }

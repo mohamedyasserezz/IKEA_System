@@ -4,6 +4,7 @@ using LinkDev.IKEA.DAL.Entities.Departments;
 using LinkDev.IKEA.PL.ViewModels.Departments;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace LinkDev.IKEA.PL.Controllers
 {
@@ -22,6 +23,22 @@ namespace LinkDev.IKEA.PL.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            #region ViewData vs ViewBag
+            //// view's Dictionary : Pass data from Controller [Action] to view ( from view -> [partial view, Layout]
+
+            ///// 1. ViewData:  is a dictionary type property (introduced in .net framework 3.5)
+            ///// => helps us to transfer data from controller[Action] to view
+
+            //ViewData["Message"] = "Hello from View Data";
+            //ViewData["obj"] = "Hello from View Data";
+            ///// 2. ViewBag:  is a Dynamic type property (introduced in .net framework 4 based on Dynamic Feature)
+            ///// => helps us to transfer data from controller[Action] to view
+
+            //ViewBag.Message = "Hello from View Bag";
+            //ViewBag.obj02 = "Hello from View Data";
+            //ViewBag.obj02 = new { Id = 1, Name = "Mohamed" }; 
+            #endregion
+
             var departments = _departmentServices.GetAllDepartments();
             return View(departments);
         }
@@ -52,34 +69,45 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
         [HttpPost]
-        public IActionResult Create(CreatedDepartmentDto department)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(DepartmentViewModel departmentVM)
         {
 
             if (!ModelState.IsValid)
-                return View(department);
+                return View(departmentVM);
 
-            var Message = String.Empty;
+            TempData["Message"] = String.Empty;
 
 
             try
             {
 
 
-                var Result = _departmentServices.CreateDepartment(department);
+                var department = (new CreatedDepartmentDto
+                {
+                    Code = departmentVM.Code,
+                    Name = departmentVM.Name,
+                    CreationDate = departmentVM.CreationDate,
+                    Description = departmentVM.Description,
+                });
+                var created = _departmentServices.CreateDepartment(department) > 0;
+                ///  TempData:  is a dictionary type property (introduced in .net framework 3.5)
+                ///  => used to transfer data between 2 Consuctive Requests
 
-                if (Result > 0)
-                    return RedirectToAction(nameof(Index));
+                if (created)
+                {
+                    TempData["Message"] = "Department is created";
+                }
                 else
                 {
 
-                    Message = "Department is not Created";
+                    TempData["Message"] = "Department is not Created";
 
-                    ModelState.AddModelError(string.Empty, Message);
 
-                    return View(department);
 
                 }
 
+                    return RedirectToAction(nameof(Index));
 
             }
             catch (Exception ex)
@@ -89,11 +117,11 @@ namespace LinkDev.IKEA.PL.Controllers
                 _logger.LogError(ex, ex.Message);
 
                 // 2.Set Message
-                Message = _webHostEnvironment.IsDevelopment() ? Message = ex.Message : "an Error has been occured during creating the department :(";
+                TempData["Message"] = _webHostEnvironment.IsDevelopment() ? TempData["Message"] = ex.Message : "an Error has been occured during creating the department :(";
 
             }
-            ModelState.AddModelError(String.Empty, Message);
-            return View(department);
+            ModelState.AddModelError(String.Empty, TempData["Message"] as string ?? string.Empty);
+            return RedirectToAction(nameof(Index ));
         }
         #endregion
 
@@ -110,7 +138,7 @@ namespace LinkDev.IKEA.PL.Controllers
             if (department is null)
                 return NotFound();
 
-            return View(new DepartmentEditViewModel
+            return View(new DepartmentViewModel
             {
                 Description = department.Description,
                 CreationDate = department.CreationDate,
@@ -120,7 +148,8 @@ namespace LinkDev.IKEA.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit([FromRoute] int id, DepartmentEditViewModel departmentVM)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromRoute] int id, DepartmentViewModel departmentVM)
         {
             if (!ModelState.IsValid)
                 return View(departmentVM);
@@ -177,6 +206,7 @@ namespace LinkDev.IKEA.PL.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var department = _departmentServices.GetDepartmentsById(id);
@@ -214,7 +244,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
             ModelState.AddModelError(String.Empty, Message);
             return View(department);
-        } 
+        }
         #endregion
     }
 }

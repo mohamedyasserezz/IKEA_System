@@ -2,7 +2,7 @@
 
 namespace LinkDev.IKEA.PL.ViewModels.Departments
 {
-    public class DepartmentEditViewModel
+    public class DepartmentViewModel
     {
         [Required(ErrorMessage = "Code is required ya prince!!")]
         public string Code { get; set; } = null!;
