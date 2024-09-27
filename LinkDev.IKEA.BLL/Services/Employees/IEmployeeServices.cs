@@ -10,7 +10,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
     public interface IEmployeeServices
     {
         EmployeeDetailsDto? GetEmployeesById(int id);
-        IEnumerable<EmployeeDto> GetAllEmployees();
+        IEnumerable<EmployeeDto> GetEmployees(string search);
         int CreateEmployee(CreatedEmployeeDto EmployeeDto);
         int UpdateEmployee(UpdatedEmployeeDto EmployeeDto);
         bool DeleteEmployee(int id);

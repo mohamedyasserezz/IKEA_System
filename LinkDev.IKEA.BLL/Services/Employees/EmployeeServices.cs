@@ -14,10 +14,10 @@ namespace LinkDev.IKEA.BLL.Services.Employees
     {
         private readonly IEmployeeRepository _employeeRepository = employeeRepository;
 
-        public IEnumerable<EmployeeDto> GetAllEmployees()
+        public IEnumerable<EmployeeDto> GetEmployees(string search)
         {
             var employees = _employeeRepository.GetIQueryable()
-                .Where(E => !E.IsDeleted).Include(E => E.Department)
+                .Where(E => !E.IsDeleted && (string.IsNullOrEmpty(search) || E.Name.ToLower().Contains(search.ToLower()))).Include(E => E.Department)
                 .Select(EmployeeDto => new EmployeeDto
                 {
                     Id = EmployeeDto.Id,

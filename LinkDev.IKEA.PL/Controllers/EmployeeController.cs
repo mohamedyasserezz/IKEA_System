@@ -21,12 +21,21 @@ namespace LinkDev.IKEA.PL.Controllers
 
         #region Index
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index([FromQuery]string search)
         {
-            var employees = _employeeServices.GetAllEmployees();
+            var employees = _employeeServices.GetEmployees(search);
             return View(employees);
         }
         #endregion
+
+        //#region Search
+        //[HttpGet]
+        //public IActionResult Search([FromQuery] string search)
+        //{
+        //    var employees = _employeeServices.GetEmployees(search);
+        //    return PartialView("Partials/EmployeeTablePartial", employees);
+        //}
+        //#endregion
 
         #region Details
         [HttpGet]
