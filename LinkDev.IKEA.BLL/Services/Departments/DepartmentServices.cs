@@ -13,9 +13,9 @@ namespace LinkDev.IKEA.BLL.Services.Departments
     public class DepartmentServices(IDepartmentRepository repository) : IDepartmentServices
     {
         private readonly IDepartmentRepository _repository = repository;
-        public IEnumerable<DepartmentDto> GetAllDepartments()
+        public IEnumerable<DepartmentDto> GetDepartments(string search)
         {
-            var departments = _repository.GetIQueryable().Where(D => !D.IsDeleted).Select(de => new DepartmentDto
+            var departments = _repository.GetIQueryable().Where(D => !D.IsDeleted && (string.IsNullOrEmpty(search) || (D.Name.ToLower().Contains(search.ToLower())))).Select(de => new DepartmentDto
             {
                 Id = de.Id,
                 Code = de.Code,
@@ -38,7 +38,7 @@ namespace LinkDev.IKEA.BLL.Services.Departments
         public DepartmentDetailsDto? GetDepartmentsById(int id)
         {
             var department = _repository.Get(id);
-            if (department is { IsDeleted:false } )
+            if (department is { IsDeleted: false })
                 return new DepartmentDetailsDto
                 {
                     Id = department.Id,

@@ -3,7 +3,9 @@ using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.DAL.Persistance.Data;
 using LinkDev.IKEA.DAL.Persistance.Repositories.Departments;
 using LinkDev.IKEA.DAL.Persistance.Repositories.Employees;
+using LinkDev.IKEA.PL.Mapping;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 namespace LinkDev.IKEA.PL
 {
     public class Program
@@ -42,6 +44,11 @@ namespace LinkDev.IKEA.PL
             builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+
+
+            //builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
+            //builder.Services.AddAutoMapper(typeof(MappingProfile));
+            builder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
             #endregion
 
             var app = builder.Build();

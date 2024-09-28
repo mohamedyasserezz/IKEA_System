@@ -4,7 +4,7 @@
 
 @{
     ViewData["Title"] = "Create";
-    var departments = new SelectList(_departmentServices.GetAllDepartments(), nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
+    var departments = new SelectList(_departmentServices.GetDepartments(null!), nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
 }
 
 

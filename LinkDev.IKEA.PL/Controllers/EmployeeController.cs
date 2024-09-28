@@ -1,4 +1,5 @@
-﻿using LinkDev.IKEA.BLL.Models.Employees;
+﻿using AutoMapper;
+using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.DAL.Entities.Employees;
@@ -8,16 +9,17 @@ using Microsoft.AspNetCore.Mvc;
 namespace LinkDev.IKEA.PL.Controllers
 {
     public class EmployeeController
-        (IEmployeeServices employeeServices,
-        ILogger<EmployeeController> logger,
-        IWebHostEnvironment webHostEnvironment
+        (IEmployeeServices _employeeServices,
+        IMapper _mapper,
+        ILogger<EmployeeController> _logger,
+        IWebHostEnvironment _webHostEnvironment
         ) : Controller
     {
-        #region Services
-        private readonly IEmployeeServices _employeeServices = employeeServices;
-        private readonly ILogger<EmployeeController> _logger = logger;
-        private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
-        #endregion
+        //#region Services
+        //private readonly IEmployeeServices _employeeServices = employeeServices;
+        //private readonly ILogger<EmployeeController> _logger = logger;
+        //private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
+        //#endregion
 
         #region Index
         [HttpGet]
@@ -57,7 +59,7 @@ namespace LinkDev.IKEA.PL.Controllers
         [HttpGet]
         public IActionResult Create([FromServices] IDepartmentServices _departmentServices)
         {
-            ViewData["Departments"] = _departmentServices.GetAllDepartments();
+            ViewData["Departments"] = _departmentServices.GetDepartments(null!);
             return View();
         }
 
@@ -120,20 +122,23 @@ namespace LinkDev.IKEA.PL.Controllers
 
             if (Employee is null)
                 return NotFound();
+            var EmployeeDto = _mapper.Map<UpdatedEmployeeDto>(Employee);
+            return View(EmployeeDto);
 
-            return View(new UpdatedEmployeeDto
-            {
-                EmployeeType = Employee.EmployeeType,
-                Gender = Employee.Gender,
-                Address = Employee.Address,
-                Age = Employee.Age,
-                Email = Employee.Email,
-                HiringDate = Employee.HiringDate,
-                IsActive = Employee.IsActive,
-                Name = Employee.Name,
-                PhoneNumber = Employee.PhoneNumber,
-                Salary = Employee.Salary,
-            });
+            ///return View(new UpdatedEmployeeDto
+            ///{
+            ///    EmployeeType = Employee.EmployeeType,
+            ///    Gender = Employee.Gender,
+            ///    Address = Employee.Address,
+            ///    Age = Employee.Age,
+            ///    Email = Employee.Email,
+            ///    HiringDate = Employee.HiringDate,
+            ///    IsActive = Employee.IsActive,
+            ///    Name = Employee.Name,
+            ///    PhoneNumber = Employee.PhoneNumber,
+            ///    Salary = Employee.Salary,
+            ///});
+            
         }
 
         [HttpPost]
