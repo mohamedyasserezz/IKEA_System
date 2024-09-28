@@ -10,6 +10,7 @@ namespace LinkDev.IKEA.PL.Controllers
 {
     public class EmployeeController
         (IEmployeeServices _employeeServices,
+        IDepartmentServices _departmentServices,
         IMapper _mapper,
         ILogger<EmployeeController> _logger,
         IWebHostEnvironment _webHostEnvironment
@@ -119,7 +120,7 @@ namespace LinkDev.IKEA.PL.Controllers
                 return BadRequest();
 
             var Employee = _employeeServices.GetEmployeesById(id.Value);
-
+            ViewData["Departments"] = _departmentServices.GetDepartments(null!);
             if (Employee is null)
                 return NotFound();
             var EmployeeDto = _mapper.Map<UpdatedEmployeeDto>(Employee);
