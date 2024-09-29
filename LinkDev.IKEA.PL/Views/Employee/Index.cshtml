@@ -107,22 +107,23 @@ else
     </div>
 }
 
-@* <script>
-    const searchBar = $('#searchInp');
-    const table = $('table');
-    searchBar.On('Keyup', function (event) {
-    var searchValue = searchBar.val();
-    $.ajax({
-        URL: '/Employee/Search',
-        type: 'Get',
-        data: { searchInp : searchValue },
-        success: function(result) {
-            table.html(result)
-        },
-        error: function(xhr,status,error){
-            console.log(error)
-        }
-
-    })
-      })
-</script> *@
+<script>
+    $(document).ready(function () {
+        const searchBar = $('#searchInp');
+        const table = $('table');
+        searchBar.on('keyup', function (event) {
+            var searchValue = searchBar.val();
+            $.ajax({
+                url: '/Employee/Search', // 'url' in lowercase
+                type: 'GET', // 'GET' should be in uppercase
+                data: { searchInp: searchValue },
+                success: function (result) {
+                    table.html(result);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>

@@ -67,19 +67,18 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CreatedEmployeeDto Employee)
+        public IActionResult Create(EmployeeViewModel EmployeeVM)
         {
 
             if (!ModelState.IsValid)
-                return View(Employee);
+                return View(EmployeeVM);
 
             var Message = String.Empty;
 
 
             try
             {
-
-                var Result = _employeeServices.CreateEmployee(Employee);
+                var Result = _employeeServices.CreateEmployee(EmployeeVM);
 
                 if (Result > 0)
                     return RedirectToAction(nameof(Index));
@@ -90,7 +89,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
                     ModelState.AddModelError(string.Empty, Message);
 
-                    return View(Employee);
+                    return View(EmployeeVM);
 
                 }
 
@@ -107,7 +106,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
             }
             ModelState.AddModelError(String.Empty, Message);
-            return View(Employee);
+            return View(EmployeeVM);
         }
         #endregion
 
@@ -123,8 +122,8 @@ namespace LinkDev.IKEA.PL.Controllers
             ViewData["Departments"] = _departmentServices.GetDepartments(null!);
             if (Employee is null)
                 return NotFound();
-            var EmployeeDto = _mapper.Map<UpdatedEmployeeDto>(Employee);
-            return View(EmployeeDto);
+            var EmployeeVM = _mapper.Map<EmployeeViewModel>(Employee);
+            return View(EmployeeVM);
 
             ///return View(new UpdatedEmployeeDto
             ///{
@@ -144,17 +143,17 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto employee)
+        public IActionResult Edit([FromRoute] int id, EmployeeViewModel employeeVM)
         {
             if (!ModelState.IsValid)
-                return View(employee);
+                return View(employeeVM);
 
             var Message = string.Empty;
             try
             {
+                var employeeDto = _mapper.Map<UpdatedEmployeeDto>(employeeVM);
 
-
-                var result = _employeeServices.UpdateEmployee(employee) > 0;
+                var result = _employeeServices.UpdateEmployee(employeeDto) > 0;
 
                 if (result)
                     return RedirectToAction("Index");
@@ -173,7 +172,7 @@ namespace LinkDev.IKEA.PL.Controllers
             }
 
             ModelState.AddModelError(String.Empty, Message);
-            return View(employee);
+            return View(employeeVM);
 
         }
 

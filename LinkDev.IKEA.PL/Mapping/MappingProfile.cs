@@ -10,7 +10,10 @@ namespace LinkDev.IKEA.PL.Mapping
         public MappingProfile()
         {
             #region Employee
-            CreateMap<EmployeeDetailsDto, UpdatedEmployeeDto>();
+            CreateMap<EmployeeViewModel, CreatedEmployeeDto>().ReverseMap();
+            CreateMap<EmployeeViewModel, UpdatedEmployeeDto>().ReverseMap();
+            CreateMap<EmployeeDetailsDto, UpdatedEmployeeDto>().ReverseMap();
+            CreateMap<EmployeeDetailsDto, EmployeeViewModel>();
             #endregion
 
             #region Department

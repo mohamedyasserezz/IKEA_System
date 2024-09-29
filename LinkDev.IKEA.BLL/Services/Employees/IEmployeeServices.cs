@@ -11,7 +11,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
     {
         EmployeeDetailsDto? GetEmployeesById(int id);
         IEnumerable<EmployeeDto> GetEmployees(string search);
-        int CreateEmployee(CreatedEmployeeDto EmployeeDto);
+        int CreateEmployee(EmployeeViewModel EmployeeVM);
         int UpdateEmployee(UpdatedEmployeeDto EmployeeDto);
         bool DeleteEmployee(int id);
     }

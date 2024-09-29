@@ -1,21 +1,17 @@
-﻿using LinkDev.IKEA.BLL.Models.Employees;
+﻿using LinkDev.IKEA.BLL.Common.Services.Attachments;
+using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.DAL.Entities.Employees;
-using LinkDev.IKEA.DAL.Persistance.Repositories.Employees;
 using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace LinkDev.IKEA.BLL.Services.Employees
 {
-    public class EmployeeServices(IUnitOfWork _unitOfWork) : IEmployeeServices
+    public class EmployeeServices(IUnitOfWork _unitOfWork,
+        IAttachmentService _attachmentService) : IEmployeeServices
     {
 
         public IEnumerable<EmployeeDto> GetEmployees(string search)
         {
+
 
             var employees = _unitOfWork.EmployeeRepository.GetIQueryable()
                 .Where(E => !E.IsDeleted && (string.IsNullOrEmpty(search) || E.Name.ToLower().Contains(search.ToLower()))).Include(E => E.Department)
@@ -25,7 +21,6 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                     Name = EmployeeDto.Name,
                     Age = EmployeeDto.Age,
                     Salary = EmployeeDto.Salary,
-
                     Email = EmployeeDto.Email,
                     IsActive = EmployeeDto.IsActive,
                     Gender = nameof(EmployeeDto.Gender),
@@ -61,8 +56,9 @@ namespace LinkDev.IKEA.BLL.Services.Employees
 
         }
 
-        public int CreateEmployee(CreatedEmployeeDto EmployeeDto)
+        public int CreateEmployee(EmployeeViewModel EmployeeDto)
         {
+            
             var employee = new Employee
             {
                 DepartmentId = EmployeeDto.DepartmentId,
@@ -81,6 +77,8 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 LastModifiedOn = DateTime.UtcNow,
             };
 
+            if(EmployeeDto.Image is not null) 
+                employee.Image = _attachmentService.Upload(EmployeeDto.Image, "Images");
             _unitOfWork.EmployeeRepository.Add(employee);
             return _unitOfWork.Complete();
         }
@@ -103,6 +101,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 LastModifiedBy = 1,
                 LastModifiedOn = DateTime.UtcNow,
                 DepartmentId = EmployeeDto.DepartmentId,
+                Image = EmployeeDto.Image,
             };
 
             _unitOfWork.EmployeeRepository.Update(employee);
