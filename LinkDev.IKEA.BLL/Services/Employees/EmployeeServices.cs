@@ -26,6 +26,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                     Gender = nameof(EmployeeDto.Gender),
                     EmployeeType = nameof(EmployeeDto.EmployeeType),
                     Department = EmployeeDto.Department!.Name,
+                    Image = EmployeeDto.Image,
 
                 }).ToList();
 
@@ -50,6 +51,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                     IsActive = employee.IsActive,
                     Gender = employee.Gender,
                     EmployeeType = employee.EmployeeType,
+                    Image = employee.Image,
 
                 };
             return null;
