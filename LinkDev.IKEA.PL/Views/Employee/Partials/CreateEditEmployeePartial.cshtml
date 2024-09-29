@@ -3,7 +3,7 @@
 @inject IDepartmentServices _departmentServices
 
 @{
-    var departments = new SelectList(_departmentServices.GetDepartments(null!), nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
+    var departments = new SelectList(await _departmentServices.GetDepartmentsAsync(null!), nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
 }
 
 <div class="row justify-content-center align-items-center flex-column">

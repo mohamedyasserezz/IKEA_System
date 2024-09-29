@@ -13,11 +13,11 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositories._Generic
     {
         private readonly ApplicationDbContext _dbContext = dbContext;
 
-        public IEnumerable<T> GetAll(bool WithAsNoTracking = true)
+        public async Task<IEnumerable<T>> GetAllAsync(bool WithAsNoTracking = true)
         {
             if (WithAsNoTracking)
-                return _dbContext.Set<T>().Where(E => !E.IsDeleted).AsNoTracking().ToList();
-            return _dbContext.Set<T>().Where(E => !E.IsDeleted).ToList();
+                return await _dbContext.Set<T>().Where(E => !E.IsDeleted).AsNoTracking().ToListAsync();
+            return await _dbContext.Set<T>().Where(E => !E.IsDeleted).ToListAsync();
         }
         public IQueryable<T> GetIQueryable()
         {
@@ -27,9 +27,9 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositories._Generic
         {
             throw new NotImplementedException();
         }
-        public T? Get(int id)
+        public async Task<T?> GetAsync(int id)
         {
-            return _dbContext.Set<T>().Find(id);
+            return await _dbContext.Set<T>().FindAsync(id);
             //return _dbContext.Find<T>(id);
 
             /// var T = _dbContext.Set<T>().Local.FirstOrDefault(d => d.Id == id);
@@ -41,13 +41,13 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositories._Generic
         public void Add(T entity) => _dbContext.Set<T>().Add(entity);
 
         public void Update(T entity) => _dbContext.Update(entity);
-       
+
         public void Delete(T entity)
         {
             entity.IsDeleted = true;
             _dbContext.Update(entity);
         }
 
-
+       
     }
 }
