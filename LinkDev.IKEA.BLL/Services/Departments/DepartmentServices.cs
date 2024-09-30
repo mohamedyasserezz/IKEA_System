@@ -1,27 +1,23 @@
 ﻿using LinkDev.IKEA.BLL.Models.Departments;
 using LinkDev.IKEA.DAL.Entities.Departments;
-using LinkDev.IKEA.DAL.Persistance.Repositories.Departments;
+using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LinkDev.IKEA.BLL.Services.Departments
 {
-    public class DepartmentServices(IDepartmentRepository repository) : IDepartmentServices
+    public class DepartmentServices(IUnitOfWork _unitOfWork) : IDepartmentServices
     {
-        private readonly IDepartmentRepository _repository = repository;
-        public IEnumerable<DepartmentDto> GetAllDepartments()
+       
+        public async Task<IEnumerable<DepartmentDto>> GetDepartmentsAsync(string search)
         {
-            var departments = _repository.GetIQueryable().Where(D => !D.IsDeleted).Select(de => new DepartmentDto
+            
+            var departments = await _unitOfWork.DepartmentRepository.GetIQueryable().Where(D => !D.IsDeleted && (string.IsNullOrEmpty(search) || (D.Name.ToLower().Contains(search.ToLower())))).Select(de => new DepartmentDto
             {
                 Id = de.Id,
                 Code = de.Code,
                 Name = de.Name,
                 CreationDate = de.CreationDate,
-            }).AsNoTracking().ToList();
+            }).AsNoTracking().ToListAsync();
             return departments;
 
             /// foreach (var department in departments)
@@ -35,10 +31,10 @@ namespace LinkDev.IKEA.BLL.Services.Departments
             ///     };
         }
 
-        public DepartmentDetailsDto? GetDepartmentsById(int id)
+        public async Task<DepartmentDetailsDto?> GetDepartmentsByIdAsync(int id)
         {
-            var department = _repository.Get(id);
-            if (department is { IsDeleted:false } )
+            var department = await _unitOfWork.DepartmentRepository.GetAsync(id);
+            if (department is { IsDeleted: false })
                 return new DepartmentDetailsDto
                 {
                     Id = department.Id,
@@ -54,7 +50,7 @@ namespace LinkDev.IKEA.BLL.Services.Departments
             return null;
         }
 
-        public int CreateDepartment(CreatedDepartmentDto departmentDto)
+        public async Task<int> CreateDepartmentAsync(CreatedDepartmentDto departmentDto)
         {
             var department = new Department()
             {
@@ -67,10 +63,11 @@ namespace LinkDev.IKEA.BLL.Services.Departments
                 LastModifiedBy = 1,
                 LastModifiedOn = DateTime.UtcNow,
             };
-            return _repository.Add(department);
+             _unitOfWork.DepartmentRepository.Add(department);
+            return await _unitOfWork.CompleteAsync();
         }
 
-        public int UpdateDepartment(UpdatedDepartmentDto departmentDto)
+        public async Task<int> UpdateDepartmentAsync(UpdatedDepartmentDto departmentDto)
         {
             var department = new Department
             {
@@ -83,19 +80,19 @@ namespace LinkDev.IKEA.BLL.Services.Departments
                 LastModifiedOn = DateTime.UtcNow,
 
             };
-            return _repository.Update(department);
+             _unitOfWork.DepartmentRepository.Update(department);
+            return await _unitOfWork.CompleteAsync();
         }
-        public bool DeleteDepartment(int id)
+        public async Task<bool> DeleteDepartmentAsync(int id)
         {
-            var department = _repository.Get(id);
+            var departmentRepo = _unitOfWork.DepartmentRepository;
+            var department = await departmentRepo.GetAsync(id);
             if (department is null)
                 return false;
-            _repository.Delete(department);
-            return true;
+            departmentRepo.Delete(department);
+            return await _unitOfWork.CompleteAsync() > 0;
         }
 
-
-
-
+       
     }
 }
