@@ -1,5 +1,6 @@
 ﻿using LinkDev.IKEA.DAL.Entities.Identity;
 using LinkDev.IKEA.PL.ViewModels.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;

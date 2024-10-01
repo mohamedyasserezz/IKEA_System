@@ -3,12 +3,14 @@ using LinkDev.IKEA.BLL.Models.Departments;
 using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.DAL.Entities.Departments;
 using LinkDev.IKEA.PL.ViewModels.Departments;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace LinkDev.IKEA.PL.Controllers
 {
+    [Authorize]
     public class DepartmentController
         (IDepartmentServices _departmentServices,
         IMapper _mapper,
