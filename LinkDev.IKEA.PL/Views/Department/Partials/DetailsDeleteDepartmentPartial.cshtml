@@ -1,0 +1,85 @@
+﻿@model DepartmentDetailsDto
+
+<ul class="nav nav-tabs" id="departmentTabs" role="tablist">
+
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="general-tab" data-bs-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">
+            General
+        </a>
+    </li>
+
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="adminstration-tab" data-bs-toggle="tab" href="#adminstration" role="tab" aria-controls="adminstration" aria-selected="false">
+            Adminstration
+        </a>
+    </li>
+
+</ul>
+
+<div class="tab-content" id="myTabContent">
+
+    <!-- General Tab Content -->
+    <div class="tab-pane fade show active p-4 border" id="general" aria-labelledby="general-tab" role="tabpanel">
+        <div class="row">
+
+            <div class="form-group col-6">
+                <label class="col-form-label" asp-for="Code"></label>
+                <input class="form-control" asp-for="Code" readonly />
+            </div>
+            <div class="form-group col-6">
+                <label class="col-form-label" asp-for="Name"></label>
+                <input class="form-control" asp-for="Name" readonly />
+            </div>
+            <div class="form-group col-6">
+                <label class="col-form-label" asp-for="Description"></label>
+                <input class="form-control" asp-for="Description" readonly />
+            </div>
+            <div class="form-group col-6">
+                <label class="col-form-label" asp-for="CreationDate"></label>
+                <input class="form-control" asp-for="CreationDate" readonly />
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- adminstration Tab Content -->
+    <div class="tab-pane fade p-4 border" id="adminstration" aria-labelledby="adminstration-tab" role="tabpanel">
+
+        <div class="form-group col-6">
+            <label class="col-form-label" asp-for="CreatedBy"></label>
+            <input class="form-control" asp-for="CreatedBy" readonly />
+        </div>
+        <div class="form-group col-6">
+            <label class="col-form-label" asp-for="CreatedOn"></label>
+            <input class="form-control" asp-for="CreatedOn" readonly />
+        </div>
+        <div class="form-group col-6">
+            <label class="col-form-label" asp-for="LastModifiedBy"></label>
+            <input class="form-control" asp-for="LastModifiedBy" readonly />
+        </div>
+        <div class="form-group col-6">
+            <label class="col-form-label" asp-for="LastModifiedOn"></label>
+            <input class="form-control" asp-for="LastModifiedOn" readonly />
+        </div>
+
+    </div>
+    @if (ViewBag.Title == "Details")
+    {
+        <!--Buttons-->
+        <div class="mt-4">
+            <a asp-action="@ViewBag.Action" asp-route-id="@ViewBag.Id" class="btn btn-success">@ViewBag.Title</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to list</a>
+        </div>
+    }
+   else{
+        <form asp-action="Delete" asp-route-id="@ViewBag.Id" class="mt-4">
+            <input type="submit" value="Delete" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+   }
+
+   
+
+
+</div>
